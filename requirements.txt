@@ -12,6 +12,7 @@ langchain-community==0.4.1
 langchain-classic
 ChatOllama==0.2.13
 langchain_text_splitters==1.1.0
+langchain_google_genai
 pypdf==6.5.0
 
 #====================================

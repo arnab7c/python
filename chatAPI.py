@@ -213,8 +213,7 @@ function escapeHtml(str) {
     return str
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/\r?\n/g, "<br>");
+        .replace(/>/g, "&gt;");
 }
 
 async function refreshChat() {

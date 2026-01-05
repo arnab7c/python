@@ -1,17 +1,21 @@
+import os
 import asyncio
 # from langchain_core.runnables.history import RunnableWithMessageHistory
 # from langchain_community.chat_message_histories import ChatMessageHistory
 from threading import Event
 
+from dotenv import load_dotenv
 from langchain_chroma import Chroma
 from langchain_classic.chains import RetrievalQA, ConversationalRetrievalChain
 from langchain_core.prompts import PromptTemplate
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_ollama import ChatOllama
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 import src.Utility as Utility
 
 logger = Utility.setup_logger("Retriever.log")
+load_dotenv()
 
 class Retriever:
     def __init__(self):
@@ -34,11 +38,23 @@ class Retriever:
         llm_provider = Utility.get_llm_provider()
         llm_model = Utility.get_llm_model(llm_provider)
         temperature = Utility.get_temperature(llm_provider)
+        max_retries = Utility.get_llm_max_retries(llm_provider)
+
+        logger.info("Connected Model :: {}".format(llm_model))
 
         llm = ChatOllama(
             model=llm_model,
             temperature=temperature,
         )
+
+        if llm_provider == "google_genai":
+            llm = ChatGoogleGenerativeAI(
+                model=llm_model,
+                temperature=temperature,
+                timeout=30,
+                max_retries=max_retries,
+            )
+
         return llm
 
 # =====================================================
