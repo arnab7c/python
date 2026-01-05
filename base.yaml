@@ -1,0 +1,61 @@
+app:
+  name: GenAI
+  seed: 42
+
+paths:
+  base_dir: "/Users/papai/PycharmProjects/GenAI/"
+  raw_data_dir: "data/raw"
+  processed_data_dir: "data/processed"
+  index_dir: "data/index"
+  log_dir: "data/log"
+
+ingestion:
+  splitter: "RecursiveCharacterTextSplitter"
+  RecursiveCharacterTextSplitter:
+    chunk_size: 500
+    chunk_overlap: 50
+
+embeddings:
+  provider: "huggingface"
+  huggingface:
+    model_name: "sentence-transformers/all-MiniLM-L6-v2"
+    normalize: true
+  ollama:
+    model_name:
+    normalize: true
+
+vector_store:
+  backend: "chroma"   # chroma | faiss | elastic | pgvector
+  chroma:
+    persist_directory: "data/index/chroma"
+  faiss:
+    persist_directory: "data/index/faiss"
+  elastic:
+    persist_directory: "data/index/elastic"
+  pgvector:
+    persist_directory: "data/index/pgvector"
+
+retrieval:
+  top_k: 3
+  hybrid: false
+
+rerank:
+  enabled: false
+  model_name: "cross-encoder/ms-macro-MiniLM-L-6-v2"
+  top_k: 4
+
+generation:
+  provider: "ollama"    # openai | azure_openai | anthropic | ollama | google_genai
+  ollama:
+    model_name: "gemma3"
+    max_tokens: 1024
+    max_retries: 3
+    temperature: 0.4
+    citations: true
+  google_genai:
+    model_name: "gemini-2.5-flash"
+    max_tokens: 1024
+    temperature: 0.4
+    max_retries: 2
+
+
